@@ -8,9 +8,37 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Application\DTOs\NovaPasta1\**" />
+    <Compile Remove="Application\DTOs\NovaPasta2\**" />
+    <Compile Remove="Application\DTOs\NovaPasta\**" />
+    <Compile Remove="Domain\NovaPasta\**" />
+    <Content Remove="Application\DTOs\NovaPasta1\**" />
+    <Content Remove="Application\DTOs\NovaPasta2\**" />
+    <Content Remove="Application\DTOs\NovaPasta\**" />
+    <Content Remove="Domain\NovaPasta\**" />
+    <EmbeddedResource Remove="Application\DTOs\NovaPasta1\**" />
+    <EmbeddedResource Remove="Application\DTOs\NovaPasta2\**" />
+    <EmbeddedResource Remove="Application\DTOs\NovaPasta\**" />
+    <EmbeddedResource Remove="Domain\NovaPasta\**" />
+    <None Remove="Application\DTOs\NovaPasta1\**" />
+    <None Remove="Application\DTOs\NovaPasta2\**" />
+    <None Remove="Application\DTOs\NovaPasta\**" />
+    <None Remove="Domain\NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Application\DTOs\UpdateProduto.cs" />
+    <Compile Remove="Domain\Entities\Item.cs" />
+    <Compile Remove="Domain\Entities\Pedidos.cs" />
+    <Compile Remove="Domain\Entities\Restaurante - Cópia.cs" />
+    <Compile Remove="Domain\Entities\Usuarios.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
   </ItemGroup>
 
 </Project>

@@ -19,7 +19,7 @@ public class RestauranteController : ControllerBase
         UpdateRestauranteUseCase updateRestauranteUseCase,
         ListarRestaurantesUseCase listarRestaurantesUseCase,
         ListarRestaurantesAbertosUseCase listarRestaurantesAbertosUseCase,
-        BuscarRestaurantePorIdUseCase buscarRestaurantePorIdUseCase)
+        BuscarRestaurantePorIdUseCase buscarRestaurantePorIdUseCase)    
     {
         _createRestauranteUseCase = createRestauranteUseCase;
         _updateRestauranteUseCase = updateRestauranteUseCase;

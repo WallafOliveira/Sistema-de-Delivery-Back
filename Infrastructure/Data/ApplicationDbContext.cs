@@ -10,6 +10,7 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<Restaurante> Restaurantes { get; set; }
+    public DbSet<Produto> Produtos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -23,5 +24,21 @@ public class ApplicationDbContext : DbContext
             entity.Property(e => e.Endereco).IsRequired().HasMaxLength(500);
             entity.Property(e => e.EstaAberto).IsRequired();
         });
+
+
+        modelBuilder.Entity<Produto>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Nome).IsRequired().HasMaxLength(150);
+            entity.Property(e => e.Valor).IsRequired().HasPrecision(18, 2);
+
+            // Relacionamento: Um Produto pertence a um Restaurante
+            entity.HasOne(e => e.Restaurante)
+                  .WithMany() // Se o Restaurante não tem uma lista de produtos na entidade dele, deixamos vazio
+                  .HasForeignKey(e => e.RestauranteId)
+                  .OnDelete(DeleteBehavior.Restrict); // Evita deletar um restaurante e apagar os produtos em cascata sem querer
+        });
+
+
     }
 }

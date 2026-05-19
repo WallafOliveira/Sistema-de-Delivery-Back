@@ -6,32 +6,41 @@ using Sistema_de_delivery_back.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 // Database Configuration
+// Nota: Você está usando banco em memória (InMemoryDatabase) para testes iniciais, o que é ótimo!
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseInMemoryDatabase("DeliveryDb"));
 
 // Repository Registration
 builder.Services.AddScoped<IRestauranteRepository, RestauranteRepository>();
+builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>(); // <-- Adicionado o repositório de Produto
 
-// Use Cases Registration
+// Use Cases Registration - Restaurante
 builder.Services.AddScoped<CreateRestauranteUseCase>();
 builder.Services.AddScoped<UpdateRestauranteUseCase>();
 builder.Services.AddScoped<ListarRestaurantesUseCase>();
 builder.Services.AddScoped<ListarRestaurantesAbertosUseCase>();
 builder.Services.AddScoped<BuscarRestaurantePorIdUseCase>();
 
+// Use Cases Registration - Produto
+builder.Services.AddScoped<CreateProdutoUseCase>();       // <-- Adicionado o Use Case de Criar Produto
+builder.Services.AddScoped<UpdateProdutoUseCase>();   // <-- Adicionado o Use Case de Atualizar Produto
+builder.Services.AddScoped<ListarProdutoUseCase>();
+builder.Services.AddScoped<ListarProdutosPorRestauranteUseCase>();
+
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Swagger Middleware
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
