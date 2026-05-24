@@ -1,52 +1,60 @@
+using DataApplications.Data;
 using Microsoft.EntityFrameworkCore;
 using Sistema_de_delivery_back.Application.UseCases;
+using Sistema_de_delivery_back.Application.UseCases.Usuarios;
 using Sistema_de_delivery_back.Domain.Interfaces;
-using Sistema_de_delivery_back.Infrastructure.Data;
 using Sistema_de_delivery_back.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Database Configuration
-// Nota: Você está usando banco em memória (InMemoryDatabase) para testes iniciais, o que é ótimo!
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseInMemoryDatabase("DeliveryDb"));
+var connectionString = builder.Configuration.GetConnectionString("MySqlConnection");
+
+// Banco de dados centralizado no DataApplications
+builder.Services.AddDbContext<DeliveryDbContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 // Repository Registration
-builder.Services.AddScoped<IRestauranteRepository, RestauranteRepository>();
-builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>(); // <-- Adicionado o repositório de Produto
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
-// Use Cases Registration - Restaurante
-builder.Services.AddScoped<CreateRestauranteUseCase>();
-builder.Services.AddScoped<UpdateRestauranteUseCase>();
-builder.Services.AddScoped<ListarRestaurantesUseCase>();
-builder.Services.AddScoped<ListarRestaurantesAbertosUseCase>();
-builder.Services.AddScoped<BuscarRestaurantePorIdUseCase>();
-
-// Use Cases Registration - Produto
-builder.Services.AddScoped<CreateProdutoUseCase>();       // <-- Adicionado o Use Case de Criar Produto
-builder.Services.AddScoped<UpdateProdutoUseCase>();   // <-- Adicionado o Use Case de Atualizar Produto
-builder.Services.AddScoped<ListarProdutoUseCase>();
-builder.Services.AddScoped<ListarProdutosPorRestauranteUseCase>();
+// Use Cases Registration - Usuario
+builder.Services.AddScoped<CreateUsuarioUseCase>();
+builder.Services.AddScoped<UpdateUsuarioUseCase>();
+builder.Services.AddScoped<ListarUsuariosUseCase>();
+builder.Services.AddScoped<BuscarUsuarioPorIdUseCase>();
 
 builder.Services.AddControllers();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "Sistema de Delivery - Usuários", Version = "v1" });
+});
 
 var app = builder.Build();
 
-// Swagger Middleware
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<DeliveryDbContext>();
+        InitializeContext.Initialize(context);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while initializing the database.");
+    }
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Usuários v1"));
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

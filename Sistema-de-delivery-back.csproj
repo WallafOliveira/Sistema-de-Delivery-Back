@@ -8,21 +8,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Evita que o SDK compile o DataApplications como código-fonte direto (já referenciado via ProjectReference) -->
+    <Compile Remove="DataApplications\**" />
+    <Content Remove="DataApplications\**" />
+    <EmbeddedResource Remove="DataApplications\**" />
+    <None Remove="DataApplications\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Application\DTOs\NovaPasta1\**" />
     <Compile Remove="Application\DTOs\NovaPasta2\**" />
-    <Compile Remove="Application\DTOs\NovaPasta\**" />
     <Compile Remove="Domain\NovaPasta\**" />
     <Content Remove="Application\DTOs\NovaPasta1\**" />
     <Content Remove="Application\DTOs\NovaPasta2\**" />
-    <Content Remove="Application\DTOs\NovaPasta\**" />
     <Content Remove="Domain\NovaPasta\**" />
     <EmbeddedResource Remove="Application\DTOs\NovaPasta1\**" />
     <EmbeddedResource Remove="Application\DTOs\NovaPasta2\**" />
-    <EmbeddedResource Remove="Application\DTOs\NovaPasta\**" />
     <EmbeddedResource Remove="Domain\NovaPasta\**" />
     <None Remove="Application\DTOs\NovaPasta1\**" />
     <None Remove="Application\DTOs\NovaPasta2\**" />
-    <None Remove="Application\DTOs\NovaPasta\**" />
     <None Remove="Domain\NovaPasta\**" />
   </ItemGroup>
 
@@ -35,10 +39,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="DataApplications\DataApplications.csproj" />
   </ItemGroup>
 
 </Project>
